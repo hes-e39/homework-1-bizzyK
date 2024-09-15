@@ -1,5 +1,32 @@
 import fetchColors from './index';
 
+test('no filters provided should return an empty array', async () => {
+  const res = await fetchColors({});
+  expect(res.length).toEqual(0);
+});
+
+test('non-existent color name should return an empty array', async () => {
+  const res = await fetchColors({
+    name: 'NonExistentColor',
+  });
+  expect(res.length).toEqual(0);
+});
+
+test('non-existent complementary hex should return an empty array', async () => {
+  const res = await fetchColors({
+    compHex: 'ZZZZZZ', // Invalid hex code
+  });
+  expect(res.length).toEqual(0);
+});
+
+test('valid color but with non-existent complementary name should return an empty array', async () => {
+  const res = await fetchColors({
+    compName: 'NonExistentComplementaryColor',
+  });
+  expect(res.length).toEqual(0);
+});
+
+
 test('for hex EFDECD returns Almond', async () => {
   const res = await fetchColors({
     hex: 'EFDECD',
@@ -67,6 +94,8 @@ test('for compHex FFFFFF the expected 14 colors', async () => {
     'DBD7D2',
     'FFFFFF',
   ].sort();
+
+
 
   const received = res.map((r) => r.hex).sort();
 
